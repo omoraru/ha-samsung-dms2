@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Samsung DMS (legacy firmware)",
+        "description": "Connect to the Samsung DMS2 controller on the local network.",
+        "data": {
+          "host": "Host (IP address)",
+          "username": "Username",
+          "password": "Password",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not reach the DMS. Check the IP and that it is on the network.",
+      "invalid_auth": "The DMS rejected the username/password.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This DMS is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Samsung DMS options",
+        "description": "Enable control only after verifying the room mapping. List any addresses that must never be controlled (e.g. closed-wing units) in Protected addresses, comma-separated.",
+        "data": {
+          "control_enabled": "Enable control (on/off, mode, setpoint, fan)",
+          "protected_addresses": "Protected addresses (comma-separated, e.g. 11.00.05,11.00.06)",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    }
+  }
+}

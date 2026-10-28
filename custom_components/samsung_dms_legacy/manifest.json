@@ -1,0 +1,11 @@
+{
+  "domain": "samsung_dms_legacy",
+  "name": "Samsung DMS (legacy firmware)",
+  "codeowners": ["@omoraru"],
+  "config_flow": true,
+  "documentation": "https://github.com/omoraru/ha-samsung-dms2",
+  "issue_tracker": "https://github.com/omoraru/ha-samsung-dms2/issues",
+  "iot_class": "local_polling",
+  "requirements": [],
+  "version": "0.2.0"
+}
