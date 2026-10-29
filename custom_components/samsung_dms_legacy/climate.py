@@ -129,6 +129,11 @@ class SamsungDMSClimate(CoordinatorEntity[SamsungDMSCoordinator], ClimateEntity)
 
     @property
     def current_temperature(self) -> float | None:
+        # An off indoor unit has no airflow across its return-air thermistor, so
+        # the reading reflects stagnant ceiling air, not the room. Report unknown
+        # rather than a misleading value; the raw reading stays in attributes.
+        if self._data.get("power") == "off":
+            return None
         return _to_float(self._data.get("roomTemp"))
 
     @property
@@ -155,10 +160,11 @@ class SamsungDMSClimate(CoordinatorEntity[SamsungDMSCoordinator], ClimateEntity)
     @property
     def extra_state_attributes(self) -> dict:
         d = self._data
-        return {
+        attrs = {
             "address": self._addr,
             "dms_op_mode": d.get("opMode"),
             "power": d.get("power"),
+            "raw_room_temp": _to_float(d.get("roomTemp")),
             "fault": d.get("error") == "true",
             "filter_warning": d.get("filterWarning") == "true",
             "remote_control_enabled": d.get("remoconEnable") == "true",
@@ -167,6 +173,11 @@ class SamsungDMSClimate(CoordinatorEntity[SamsungDMSCoordinator], ClimateEntity)
             "control_enabled": self._control,
             "protected": self._protected,
         }
+        if d.get("errorCode"):
+            attrs["error_code"] = d.get("errorCode")
+            attrs["error_description"] = d.get("errorDescription")
+            attrs["error_since"] = d.get("errorDate")
+        return attrs
 
     # ---- control ----
 

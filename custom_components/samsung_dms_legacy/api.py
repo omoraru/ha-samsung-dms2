@@ -226,6 +226,25 @@ class SamsungDMSLegacyClient:
         # _call_authed raises SamsungDMSError if the panel returns an exception.
         await self._call_authed(payload)
 
+    async def async_get_errors(self) -> dict[str, dict]:
+        """Return {addr: {code, desc, date}} for every active error.
+
+        Pulled from getStatusUpload, which carries per-indoor `<error>` elements
+        (e.g. an outdoor fault surfaced on its indoor units) plus the
+        commErrorList. getMonitoring only exposes a boolean `error` flag.
+        """
+        root = await self._call_authed("<getStatusUpload>all</getStatusUpload>")
+        out: dict[str, dict] = {}
+        for err in root.iter("error"):
+            addr = err.get("addr")
+            if addr and err.get("errorStatus") == "true":
+                out[addr] = {
+                    "code": err.get("errorCode"),
+                    "desc": err.get("errorDescription"),
+                    "date": err.get("occurDate"),
+                }
+        return out
+
     async def async_get_names(self) -> dict[str, str]:
         """Return {addr: configured_name} for indoor units (skips '-'/blank)."""
         root = await self._call_authed("<getZoneInfo>all</getZoneInfo>")

@@ -26,6 +26,13 @@ cloud, no Silverlight, no account** — over the local network.
   unit's own limits), fan speed — sent as the panel's native `setDeviceControl`.
 - **Per-unit protection:** addresses you list stay read-only even when control
   is enabled (e.g. units that must never be switched).
+- **Fault & filter binary sensors** (`problem` class) per unit, so faults and
+  filter-cleaning warnings can drive Home Assistant notifications directly. The
+  fault sensor carries the panel's error **code and description** (e.g.
+  `387 — Outdoor fan 2 Hall Sensor Error`), pulled from `getStatusUpload`.
+- **Off units report room temperature as unknown**, not the misleading stagnant
+  reading an idle indoor unit's return-air thermistor gives with no airflow (the
+  raw value stays in the `raw_room_temp` attribute).
 - Units behind a faulted outdoor unit (which the panel reports as `null`) show
   up as `unavailable` rather than as bogus state.
 - Pure local polling; re-logs in automatically on session expiry.

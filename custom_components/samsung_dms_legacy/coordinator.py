@@ -60,6 +60,14 @@ class SamsungDMSCoordinator(DataUpdateCoordinator[dict[str, dict]]):
             if not self.names:
                 # In case _async_setup's name fetch was empty, retry opportunistically.
                 self.names = await self.client.async_get_names()
-            return await self.client.async_get_monitoring()
+            data = await self.client.async_get_monitoring()
+            # Merge active error codes/descriptions onto the matching units.
+            errors = await self.client.async_get_errors()
+            for addr, err in errors.items():
+                if addr in data:
+                    data[addr]["errorCode"] = err.get("code")
+                    data[addr]["errorDescription"] = err.get("desc")
+                    data[addr]["errorDate"] = err.get("date")
+            return data
         except SamsungDMSError as err:
             raise UpdateFailed(str(err)) from err
