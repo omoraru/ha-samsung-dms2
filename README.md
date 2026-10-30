@@ -30,6 +30,9 @@ cloud, no Silverlight, no account** — over the local network.
   filter-cleaning warnings can drive Home Assistant notifications directly. The
   fault sensor carries the panel's error **code and description** (e.g.
   `387 — Outdoor fan 2 Hall Sensor Error`), pulled from `getStatusUpload`.
+- **Error sensor** per unit whose *state* is the active fault description (or
+  `OK`), so the fault text shows directly on a dashboard rather than only in
+  attributes.
 - **Off units report room temperature as unknown**, not the misleading stagnant
   reading an idle indoor unit's return-air thermistor gives with no airflow (the
   raw value stays in the `raw_room_temp` attribute).
